@@ -1,0 +1,11 @@
+Model Information:
+* title:	Wrist watch - Bvlgari Armbanduhr
+* source:	https://sketchfab.com/3d-models/wrist-watch-bvlgari-armbanduhr-6f428e5ccaa84777b285c1cc3ae33328
+* author:	David Young (https://sketchfab.com/David_Young)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Wrist watch - Bvlgari Armbanduhr" (https://sketchfab.com/3d-models/wrist-watch-bvlgari-armbanduhr-6f428e5ccaa84777b285c1cc3ae33328) by David Young (https://sketchfab.com/David_Young) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
