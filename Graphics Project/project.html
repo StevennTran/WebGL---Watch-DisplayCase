@@ -3,7 +3,6 @@
     <head>
         <title> CP411 Final Project</title>
         <meta charset = UTF-8>
-        <link rel="stylesheet" type="text/css" href="project.css">
         <style>
             body{margin: 0;}
             canvas {width: 100%; height: 100%;}
@@ -17,7 +16,6 @@
             <script src="libs/GLTFLoader.js"></script>
             <script src="libs/OBJLoader.js"></script>
             <script src="libs/OrbitControls.js"></script>
-            <script src="libs/FBXLoader.js"></script>
         </body>
 
         <script>
@@ -35,7 +33,7 @@
 
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-                camera.position.set(80,140,10);
+                camera.position.set(0,0,30);
                 controls.update();
 
                 aLight = new THREE.AmbientLight(0x404040, 10);
@@ -57,18 +55,23 @@
                 // light4 = new THREE.PointLight(0xc4c4c4,10);
                 // light4.position.set(-500,300,500);
                 // scene.add(light4);
-
+                
+                const y_axis = new THREE.Vector3(0,1,0);
                 let loader = new THREE.GLTFLoader();
                 loader.load("/assets/watch1/scene.gltf", function(gltf) {
-                    // gltf.scene.scale.set(0.5,0.5,0.5);
+                    gltf.scene.scale.set(0.25,0.25,0.25);
+                    gltf.scene.position.set(-10,0,0);
+                    gltf.scene.rotateOnAxis(y_axis,3.14);
+                    
                     scene.add(gltf.scene);
                     renderer.render(scene,camera);
                 });
 
                 let loader2 = new THREE.GLTFLoader();
                 loader.load("/assets/watch2/scene.gltf", function(gltf) {
-                    // gltf.scene.scale.set(0.5,0.5,0.5);
-                    gltf.position.set(100,100,100)
+                    gltf.scene.scale.set(6,6,6);
+                    gltf.scene.position.set(10,5.5,0);
+
                     scene.add(gltf.scene);
                     renderer.render(scene,camera);
                 });
