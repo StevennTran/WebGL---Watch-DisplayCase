@@ -42,18 +42,42 @@
                         pAnalogLight.power = 0;
                         pSmartLight.power = 0;
                         lights = false;
-                    }
-                    else {
+                    } 
+                    else if (keyCode == 32 & lights == false) {
                         pStopLight.power = 4 * Math.PI;
                         pAnalogLight.power = 4 * Math.PI;
                         pSmartLight.power = 4 * Math.PI;
                         lights = true;
+                    } else if (keyCode == 49) {
+                        
+                        camera.up.set(0,1,0);
+                        camera.lookAt(-35,5,35);
+                        camera.updateProjectionMatrix();
+
+                        // controls.autoRotate = false;
+                        camera.position.set(-40,5,40);
+                        controls.update(); 
+                        
+                    } else if (keyCode == 50) {
+                        
+                        camera.position.set(60,5,40);
+                        camera.lookAt(-100,5,100);
+                        controls.update(); 
+                        
+                    } else if (keyCode == 51) {
+                        camera.lookAt(-100,5,100);
+                        // controls.autoRotate = false;
+                        camera.position.set(-40,5,40);
+                        controls.update(); 
+                        
                     }
+
+                    
                     renderer.render(scene,camera);
                 }
 
                 camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 1, 10000);
-                camera.lookAt(0,0,0)
+
 
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -71,7 +95,7 @@
                 pStopLight.position.set(0,5,-30);
                 scene.add(pStopLight);
 
-                // Anolog
+                // Analog
                 pAnalogLight = new THREE.PointLight(0x404040, 5.5);
                 pAnalogLight.position.set(40,0,40);
                 scene.add(pAnalogLight);
@@ -150,7 +174,7 @@
                 pedestal.position.y = -10;
                 scene.add(pedestal);
 
-                var material = new THREE.MeshPhongMaterial( { color:"0xabe7f5", opacity: 0.1, transparent: true} )
+                var material = new THREE.MeshPhongMaterial( { color:0xabe7f5, opacity: 0.1, transparent: true} )
                 let displayCase = new THREE.Mesh(
                 new THREE.CylinderGeometry(30.1,30.1,40,32,32, false ), material);
                 displayCase.position.y = 13;
@@ -186,7 +210,7 @@
             }
             function animate() {
                 requestAnimationFrame(animate);
-                controls.autoRotate = true;
+                // controls.autoRotate = true;
                 controls.update(); 
                 
                 if (model1) {
