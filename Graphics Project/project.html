@@ -19,14 +19,14 @@
         </body>
 
         <script>
-            let scene, camera, renderer, controls, model1, model2, model3;
+            let scene, camera, renderer, controls, model1, model2, model3, glassTexture;
             const x_axis = new THREE.Vector3(1,0,0);
             const y_axis = new THREE.Vector3(0,1,0);
             const z_axis = new THREE.Vector3(0,0,1);
             function init() {
                 const load0 = new THREE.TextureLoader();
                 scene = new THREE.Scene();
-                scene.background = new THREE.Color(0x000000)
+                scene.background = new THREE.Color(0xAAAAAA);
 
                 renderer = new THREE.WebGLRenderer({antialias:true});
                 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -40,12 +40,24 @@
                 camera.position.set(0,30,0);
                 controls.update();
 
-                aLight = new THREE.AmbientLight(0x404040, 10);
+                aLight = new THREE.AmbientLight(0x404040, 50);
                 scene.add(aLight)
 
                 directionalLight = new THREE.DirectionalLight(0x404040, 10)
                 directionalLight.position.set(0,1,0);
                 directionalLight.castShadow = true;
+                scene.add(directionalLight);
+                directionalLight = new THREE.DirectionalLight(0x404040, 10)
+                directionalLight.position.set(1,1,0);
+                directionalLight.castShadow = true;
+                scene.add(directionalLight);
+                directionalLight = new THREE.DirectionalLight(0x404040, 10)
+                directionalLight.position.set(-1,1,0);
+                directionalLight.castShadow = true;
+                directionalLight = new THREE.DirectionalLight(0x404040, 32)
+                directionalLight.position.set(-30,0,0);
+                directionalLight.castShadow = true;
+                scene.add(directionalLight);
                 scene.add(directionalLight);
 
                 // light = new THREE.PointLight(0xc4c4c4,10);
@@ -66,8 +78,8 @@
                 loader.load("/assets/watch1/scene.gltf", function(gltf) {
                     model1 = gltf.scene;
                     gltf.scene.scale.set(0.25,0.25,0.25);
-                    gltf.scene.position.set(-15,0,0);
-                    gltf.scene.rotateOnAxis(y_axis,135*(Math.PI/180));
+                    gltf.scene.position.set(-15,5,12);
+                    gltf.scene.rotateOnAxis(y_axis,130*(Math.PI/180));
                     gltf.scene.rotateOnAxis(x_axis,270*(Math.PI/180));
                     
                     scene.add(gltf.scene);
@@ -81,8 +93,8 @@
                 loader2.load("/assets/watch2/scene.gltf", function(gltf) {
                     model2 = gltf.scene;
                     gltf.scene.scale.set(6,6,6);
-                    gltf.scene.position.set(15,0,6);
-                    gltf.scene.rotateOnAxis(y_axis,45*(Math.PI/180));
+                    gltf.scene.position.set(20,5.5,14);
+                    gltf.scene.rotateOnAxis(y_axis,50*(Math.PI/180));
                     gltf.scene.rotateOnAxis(x_axis,90*(Math.PI/180));
 
                     scene.add(gltf.scene);
@@ -97,7 +109,7 @@
                 loader3.load("/assets/watch3/scene.gltf", function(gltf) {
                     model3 = gltf.scene; 
                     gltf.scene.scale.set(5,5,5);
-                    gltf.scene.position.set(0,0,-20);
+                    gltf.scene.position.set(0,5,-18);
                     gltf.scene.rotateOnAxis(y_axis,180*(Math.PI/180));
                     // gltf.scene.rotateOnAxis(y_axis,270*(Math.PI/180));
                     
@@ -105,13 +117,42 @@
                     renderer.render(scene,camera);
                 });
 
+                const textureLoader = new THREE.TextureLoader();
+                glassTexture = new textureLoader.load("Graphics Project/assets/textures/Transparent.png");
+                let pedestal = new THREE.Mesh(
+                    new THREE.CylinderGeometry( 30, 30, 5, 32 ),
+                    new THREE.MeshPhongMaterial ({
+                        color:0xfAAAAAA
+                        // map:glassTexture
+                    })
+                );
+                
+                pedestal.position.y = -10;
+                scene.add(pedestal);
+                const skyGeom = new THREE.CubeGeometry(10000,10000,10000);
+                let skyMaterials = {
+                    // new THREE.MeshBasicMaterial( {});
+                };
+                scene.add(room);
+
             }
             function animate() {
                 requestAnimationFrame(animate);
                 controls.update(); 
-                model1.rotation.z += 0.01;
-                model2.rotation.z += 0.01;
-                model3.rotation.y += 0.01;
+                if (model1) {
+                    // model1.rotation.z += 0.01;
+                }
+                
+                if (model2) {
+                    // model2.rotation.z += 0.01;
+                }
+
+                if (model3) {
+                    // model3.position.x = (model3.position.x+1)*(Math.PI/180);
+                    // model3.position.z += (model3.position.z+1)*(Math.PI/180);
+
+
+                }
                 // renderer.clear()
                 renderer.render(scene, camera);
             }
