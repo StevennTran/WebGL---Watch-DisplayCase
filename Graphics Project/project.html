@@ -26,7 +26,7 @@
             function init() {
                 const load0 = new THREE.TextureLoader();
                 scene = new THREE.Scene();
-                scene.background = new THREE.Color(0xAAAAAA);
+                scene.background = new THREE.Color(0xD4D4D4);
 
                 renderer = new THREE.WebGLRenderer({antialias:true});
                 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -129,17 +129,17 @@
                 var material = new THREE.MeshPhongMaterial( { color:"0xabe7f5", opacity: 0.1, transparent: true} )
                 let displayCase = new THREE.Mesh(
                 new THREE.CylinderGeometry(30.1,30.1,40,32,32, false ), material);
-                displayCase.position.y = 12;
+                displayCase.position.y = 13;
                 scene.add(displayCase);
 
                 // R.Stap
                 let skyMatArr = [];
-                let textureFront = new THREE.TextureLoader().load("./assets/skybox/skybox1/1.png");
-                let textureBack = new THREE.TextureLoader().load("./assets/skybox/skybox1/2.png");
-                let textureUp = new THREE.TextureLoader().load("./assets/skybox/skybox1/3.png");
-                let textureDown = new THREE.TextureLoader().load("./assets/skybox/skybox1/4.png");
-                let textureRight = new THREE.TextureLoader().load("./assets/skybox/skybox1/5.png");
-                let textureLeft = new THREE.TextureLoader().load("./assets/skybox/skybox1/6.png");
+                let textureFront = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp2.jpg");
+                let textureBack = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp2.jpg");
+                let textureUp = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp3.jpg");
+                let textureDown = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp1.jpg");
+                let textureRight = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp2.jpg");
+                let textureLeft = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp2.jpg");
 
                 skyMatArr.push(new THREE.MeshBasicMaterial({map:textureFront}));
                 skyMatArr.push(new THREE.MeshBasicMaterial({map:textureBack}));
