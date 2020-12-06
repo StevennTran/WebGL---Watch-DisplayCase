@@ -19,7 +19,7 @@
         </body>
 
         <script>
-            let scene, camera, renderer, controls
+            let scene, camera, renderer, controls, model1, model2, model3;
             const x_axis = new THREE.Vector3(1,0,0);
             const y_axis = new THREE.Vector3(0,1,0);
             const z_axis = new THREE.Vector3(0,0,1);
@@ -64,43 +64,55 @@
                 const y_axis = new THREE.Vector3(0,1,0);
                 var loader = new THREE.GLTFLoader();
                 loader.load("/assets/watch1/scene.gltf", function(gltf) {
+                    model1 = gltf.scene;
                     gltf.scene.scale.set(0.25,0.25,0.25);
-                    gltf.scene.position.set(-10,0,0);
-                    gltf.scene.rotateOnAxis(y_axis,180*(Math.PI/180));
+                    gltf.scene.position.set(-15,0,0);
+                    gltf.scene.rotateOnAxis(y_axis,135*(Math.PI/180));
+                    gltf.scene.rotateOnAxis(x_axis,270*(Math.PI/180));
                     
                     scene.add(gltf.scene);
                     renderer.render(scene,camera);
             
                 });
+               
+
 
                 var loader2 = new THREE.GLTFLoader();
                 loader2.load("/assets/watch2/scene.gltf", function(gltf) {
+                    model2 = gltf.scene;
                     gltf.scene.scale.set(6,6,6);
-                    gltf.scene.position.set(10,5.5,0);
+                    gltf.scene.position.set(15,0,6);
+                    gltf.scene.rotateOnAxis(y_axis,45*(Math.PI/180));
+                    gltf.scene.rotateOnAxis(x_axis,90*(Math.PI/180));
 
                     scene.add(gltf.scene);
                     renderer.render(scene,camera);
 
                 });
+
 
                 // var material = new THREE.MeshPhongMaterial({map: map});
 
                 var loader3 = new THREE.GLTFLoader();
                 loader3.load("/assets/watch3/scene.gltf", function(gltf) {
-                    gltf.scene.scale.set(1,1,1);
-                    gltf.scene.position.set(0,0,-10);
-                    gltf.scene.rotateOnAxis(x_axis,270*(Math.PI/180));
+                    model3 = gltf.scene; 
+                    gltf.scene.scale.set(5,5,5);
+                    gltf.scene.position.set(0,0,-20);
+                    gltf.scene.rotateOnAxis(y_axis,180*(Math.PI/180));
+                    // gltf.scene.rotateOnAxis(y_axis,270*(Math.PI/180));
                     
                     scene.add(gltf.scene);
                     renderer.render(scene,camera);
-
                 });
 
             }
             function animate() {
                 requestAnimationFrame(animate);
-                controls.update();
-                renderer.clear()
+                controls.update(); 
+                model1.rotation.z += 0.01;
+                model2.rotation.z += 0.01;
+                model3.rotation.y += 0.01;
+                // renderer.clear()
                 renderer.render(scene, camera);
             }
             init();
