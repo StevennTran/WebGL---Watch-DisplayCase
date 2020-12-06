@@ -19,7 +19,8 @@
         </body>
 
         <script>
-            let scene, camera, renderer, controls, model1, model2, model3, glassTexture;
+            let scene, camera, renderer, controls, model1, model2, model3, glassTexture, pStopLight, pAnalogLight, pSmartLight;
+            var lights = true;
             const x_axis = new THREE.Vector3(1,0,0);
             const y_axis = new THREE.Vector3(0,1,0);
             const z_axis = new THREE.Vector3(0,0,1);
@@ -32,6 +33,25 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement);
 
+
+                document.addEventListener("keydown", onDocumentKeyDown, false);
+                function onDocumentKeyDown(event) {
+                    var keyCode = event.which;
+                    if (keyCode == 32 & lights == true) {
+                        pStopLight.power = 0;
+                        pAnalogLight.power = 0;
+                        pSmartLight.power = 0;
+                        lights = false;
+                    }
+                    else {
+                        pStopLight.power = 4 * Math.PI;
+                        pAnalogLight.power = 4 * Math.PI;
+                        pSmartLight.power = 4 * Math.PI;
+                        lights = true;
+                    }
+                    renderer.render(scene,camera);
+                }
+
                 camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 1, 10000);
                 camera.lookAt(0,0,0)
 
@@ -43,20 +63,23 @@
                 controls.maxDistance = 250;
                 controls.update();
 
-                aLight = new THREE.AmbientLight(0x404040, 1.5);
+                aLight = new THREE.AmbientLight(0x404040, 8);
                 scene.add(aLight);
 
-                pLight = new THREE.PointLight(0x404040, 3.5);
-                pLight.position.set(0,5,-30);
-                scene.add(pLight);
+                // Stopwatch
+                pStopLight = new THREE.PointLight(0x404040, 5.5);
+                pStopLight.position.set(0,5,-30);
+                scene.add(pStopLight);
 
-                pLight = new THREE.PointLight(0x404040, 5.5);
-                pLight.position.set(40,0,40);
-                scene.add(pLight);
+                // Anolog
+                pAnalogLight = new THREE.PointLight(0x404040, 5.5);
+                pAnalogLight.position.set(40,0,40);
+                scene.add(pAnalogLight);
 
-                pLight = new THREE.PointLight(0x404040, 3.5);
-                pLight.position.set(-22,5,20);
-                scene.add(pLight);
+                // Iwatch
+                pSmartLight = new THREE.PointLight(0x404040, 3.5);
+                pSmartLight.position.set(-22,5,20);
+                scene.add(pSmartLight);
 
                 // light = new THREE.PointLight(0xc4c4c4,10);
                 // light.position.set(0,300,500);
