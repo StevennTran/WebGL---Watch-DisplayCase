@@ -133,12 +133,14 @@
                 let skyMaterials = {
                     // new THREE.MeshBasicMaterial( {});
                 };
-                scene.add(room);
+                // scene.add(room);
 
             }
             function animate() {
                 requestAnimationFrame(animate);
+                controls.autoRotate = true;
                 controls.update(); 
+                
                 if (model1) {
                     // model1.rotation.z += 0.01;
                 }
