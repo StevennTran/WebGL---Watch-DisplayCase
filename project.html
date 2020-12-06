@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> CP411 Final Project</title>
+        <meta charset = UTF-8>
+        <style>
+            body{margin: 0;}
+            canvas {width: 100%; height: 100%;}
+        </style>
+    </head>
+
+    <body>
+
+        <body>
+            <script src="libs/three.js"></script>
+            <script src="libs/GLTFLoader.js"></script>
+            <script src="libs/OBJLoader.js"></script>
+            <script src="libs/OrbitControls.js"></script>
+        </body>
+
+        <script>
+            let scene, camera, renderer, controls, model1, model2, model3, glassTexture;
+            const x_axis = new THREE.Vector3(1,0,0);
+            const y_axis = new THREE.Vector3(0,1,0);
+            const z_axis = new THREE.Vector3(0,0,1);
+            function init() {
+                const load0 = new THREE.TextureLoader();
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xAAAAAA);
+
+                renderer = new THREE.WebGLRenderer({antialias:true});
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 1, 10000);
+                camera.lookAt(0,0,0)
+
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+                camera.position.set(60,20,0);
+                controls.minDistance = 10;
+                controls.maxDistance = 500;
+                controls.update();
+
+                aLight = new THREE.AmbientLight(0x404040, 50);
+                scene.add(aLight);
+
+                pLight = new THREE.PointLight(0x404040, 7.5);
+                pLight.position.set(0,30,0);
+                scene.add(pLight);
+
+                pLight = new THREE.PointLight(0x404040, 2.5);
+                pLight.position.set(60,0,0);
+                scene.add(pLight);
+
+                pLight = new THREE.PointLight(0x404040, 2.5);
+                pLight.position.set(0,0,60);
+                scene.add(pLight);
+
+                // light = new THREE.PointLight(0xc4c4c4,10);
+                // light.position.set(0,300,500);
+                // scene.add(light);
+                // light2 = new THREE.PointLight(0xc4c4c4,10);
+                // light2.position.set(500,100,0);
+                // scene.add(light2);
+                // light3 = new THREE.PointLight(0xc4c4c4,10);
+                // light3.position.set(0,100,-500);
+                // scene.add(light3);
+                // light4 = new THREE.PointLight(0xc4c4c4,10);
+                // light4.position.set(-500,300,500);
+                // scene.add(light4);
+                
+                const y_axis = new THREE.Vector3(0,1,0);
+                var loader = new THREE.GLTFLoader();
+                loader.load("/assets/watch1/scene.gltf", function(gltf) {
+                    model1 = gltf.scene;
+                    gltf.scene.scale.set(0.25,0.25,0.25);
+                    gltf.scene.position.set(-15,5,12);
+                    gltf.scene.rotateOnAxis(y_axis,130*(Math.PI/180));
+                    gltf.scene.rotateOnAxis(x_axis,270*(Math.PI/180));
+                    
+                    scene.add(gltf.scene);
+                    renderer.render(scene,camera);
+            
+                });
+               
+
+
+                var loader2 = new THREE.GLTFLoader();
+                loader2.load("/assets/watch2/scene.gltf", function(gltf) {
+                    model2 = gltf.scene;
+                    gltf.scene.scale.set(6,6,6);
+                    gltf.scene.position.set(20,5.5,14);
+                    gltf.scene.rotateOnAxis(y_axis,50*(Math.PI/180));
+                    gltf.scene.rotateOnAxis(x_axis,90*(Math.PI/180));
+
+                    scene.add(gltf.scene);
+                    renderer.render(scene,camera);
+
+                });
+
+
+                // var material = new THREE.MeshPhongMaterial({map: map});
+
+                var loader3 = new THREE.GLTFLoader();
+                loader3.load("/assets/watch3/scene.gltf", function(gltf) {
+                    model3 = gltf.scene; 
+                    gltf.scene.scale.set(5,5,5);
+                    gltf.scene.position.set(0,5,-18);
+                    gltf.scene.rotateOnAxis(y_axis,180*(Math.PI/180));
+                    // gltf.scene.rotateOnAxis(y_axis,270*(Math.PI/180));
+                    
+                    scene.add(gltf.scene);
+                    renderer.render(scene,camera);
+                });
+
+                const textureLoader = new THREE.TextureLoader();
+                glassTexture = new textureLoader.load("Transparent.png");
+                let pedestal = new THREE.Mesh(
+                    new THREE.CylinderGeometry( 30, 30, 5, 64 ),
+                    new THREE.MeshPhysicalMaterial ({
+                        color:0x000000,
+                        map:glassTexture
+                    })
+                );
+                pedestal.position.y = -10;
+                scene.add(pedestal);
+
+                var material = new THREE.MeshPhongMaterial( { color:"0xabe7f5", opacity: 0.1, transparent: true} )
+                let displayCase = new THREE.Mesh(
+                new THREE.CylinderGeometry(30.1,30.1,40,32,32, false ), material);
+                displayCase.position.y = 12;
+                scene.add(displayCase);
+
+                // R.Stap
+                let skyMatArr = [];
+                let textureFront = new THREE.TextureLoader().load("./assets/skybox/skybox1/1.png");
+                let textureBack = new THREE.TextureLoader().load("./assets/skybox/skybox1/2.png");
+                let textureUp = new THREE.TextureLoader().load("./assets/skybox/skybox1/3.png");
+                let textureDown = new THREE.TextureLoader().load("./assets/skybox/skybox1/4.png");
+                let textureRight = new THREE.TextureLoader().load("./assets/skybox/skybox1/5.png");
+                let textureLeft = new THREE.TextureLoader().load("./assets/skybox/skybox1/6.png");
+
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureFront}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureBack}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureUp}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureDown}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureRight}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureLeft}));
+
+                for (let  i =0; i < skyMatArr.length; i++) {
+                    skyMatArr[i].side = THREE.BackSide;
+                }
+
+                const skyGeom = new THREE.CubeGeometry(10000,10000,10000);
+                let skybox = new THREE.Mesh(skyGeom,skyMatArr);
+
+
+                scene.add(skybox);
+
+
+            }
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.autoRotate = true;
+                controls.update(); 
+                
+                if (model1) {
+                    // model1.rotation.z += 0.01;
+                }
+                if (model2) {
+                    // model2.rotation.z += 0.01;
+                }
+                if (model3) {
+                    // model3.position.x = (model3.position.x+1)*(Math.PI/180);
+                    // model3.position.z += (model3.position.z+1)*(Math.PI/180);
+                }
+                renderer.render(scene, camera);
+            }
+            init();
+            animate();
+        </script>
+    </body>
+
+
+</html>
