@@ -38,23 +38,24 @@
                 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
                 camera.position.set(60,20,0);
+                // camera.position.set(0,20,0);
                 controls.minDistance = 10;
-                controls.maxDistance = 500;
+                controls.maxDistance = 250;
                 controls.update();
 
-                aLight = new THREE.AmbientLight(0x404040, 50);
+                aLight = new THREE.AmbientLight(0x404040, 1.5);
                 scene.add(aLight);
 
-                pLight = new THREE.PointLight(0x404040, 7.5);
-                pLight.position.set(0,30,0);
+                pLight = new THREE.PointLight(0x404040, 3.5);
+                pLight.position.set(0,5,-30);
                 scene.add(pLight);
 
-                pLight = new THREE.PointLight(0x404040, 2.5);
-                pLight.position.set(60,0,0);
+                pLight = new THREE.PointLight(0x404040, 5.5);
+                pLight.position.set(40,0,40);
                 scene.add(pLight);
 
-                pLight = new THREE.PointLight(0x404040, 2.5);
-                pLight.position.set(0,0,60);
+                pLight = new THREE.PointLight(0x404040, 3.5);
+                pLight.position.set(-22,5,20);
                 scene.add(pLight);
 
                 // light = new THREE.PointLight(0xc4c4c4,10);
@@ -152,7 +153,7 @@
                     skyMatArr[i].side = THREE.BackSide;
                 }
 
-                const skyGeom = new THREE.CubeGeometry(10000,10000,10000);
+                const skyGeom = new THREE.CubeGeometry(400,400,400);
                 let skybox = new THREE.Mesh(skyGeom,skyMatArr);
 
 
