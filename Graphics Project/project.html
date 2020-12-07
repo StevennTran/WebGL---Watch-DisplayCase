@@ -51,23 +51,32 @@
                     } else if (keyCode == 49) {
                         
                         camera.up.set(0,1,0);
-                        camera.lookAt(-35,5,35);
+                        const look = new THREE.Vector3(-20,5,12);
+                        controls.target = look;
                         camera.updateProjectionMatrix();
-
-                        // controls.autoRotate = false;
                         camera.position.set(-43,5,37);
                         controls.update(); 
                         
                     } else if (keyCode == 50) {
                         
+                        camera.up.set(0,1,0);
+                        const look = new THREE.Vector3(20,5,14);
+                        controls.target = look;
+                        camera.updateProjectionMatrix();
                         camera.position.set(48,5,32);
-                        camera.lookAt(-100,5,100);
+
                         controls.update(); 
                         
                     } else if (keyCode == 51) {
-                        camera.lookAt(-100,5,100);
-                        // controls.autoRotate = false;
+                        const look = new THREE.Vector3(0,5,-20);
+                        controls.target = look;
                         camera.position.set(0,5,-60);
+                        controls.update(); 
+                        
+                    } else if (keyCode == 52) {
+                        const look = new THREE.Vector3(0,0,0);
+                        controls.target = look;
+                        camera.position.set(60,20,0);
                         controls.update(); 
                         
                     }
@@ -210,7 +219,7 @@
             }
             function animate() {
                 requestAnimationFrame(animate);
-                // controls.autoRotate = true;
+                controls.autoRotate = true;
                 controls.update(); 
                 
                 if (model1) {
