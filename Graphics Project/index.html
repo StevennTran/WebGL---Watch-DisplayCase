@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+    <!-- //GROUP MEMBERS:
+    // Steven Tran, and Haricharan Vinukonda -->
     <head>
         <title> CP411 Final Project</title>
         <meta charset = UTF-8>
@@ -37,6 +39,7 @@
             var lights = true;
             var skyboxThemes = ["skybox1", "skybox2", "skybox3"];
             var num = 0;
+            var base;
             const skyGeom = new THREE.CubeGeometry(400,400,400);
             const x_axis = new THREE.Vector3(1,0,0);
             const y_axis = new THREE.Vector3(0,1,0);
@@ -61,9 +64,9 @@
                         lights = false;
                     } 
                     else if (keyCode == 32 & lights == false) {
-                        pStopLight.power = 4 * Math.PI;
-                        pAnalogLight.power = 4 * Math.PI;
-                        pSmartLight.power = 4 * Math.PI;
+                        pStopLight.power = 4 * Math.PI *5.55;
+                        pAnalogLight.power = 4 * Math.PI * 5.55;
+                        pSmartLight.power = 4 * Math.PI * 5.55;
                         lights = true;
                     } else if (keyCode == 49) {
                         
