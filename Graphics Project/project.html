@@ -19,8 +19,22 @@
         </body>
 
         <script>
-            let scene, camera, renderer, controls, model1, model2, model3, glassTexture, pStopLight, pAnalogLight, pSmartLight;
+            console.log("Controls");
+            console.log("   Mouse Click - Move the camera around");
+            console.log("   left/right arrow - Change Background");
+            console.log("   1 - Pan to Watch #1");
+            console.log("   2 - Pan to Watch #2");
+            console.log("   3 - Pan to Watch #3");
+            console.log("   4 - Default view display");
+
+        </script>
+
+        <script>
+            let scene, camera, renderer, controls, model1, model2, model3, glassTexture, pStopLight, pAnalogLight, pSmartLight, skybox;
             var lights = true;
+            var skyboxThemes = ["skybox1", "skybox2", "skybox3"];
+            var num = 0;
+            const skyGeom = new THREE.CubeGeometry(400,400,400);
             const x_axis = new THREE.Vector3(1,0,0);
             const y_axis = new THREE.Vector3(0,1,0);
             const z_axis = new THREE.Vector3(0,0,1);
@@ -79,6 +93,12 @@
                         camera.position.set(60,20,0);
                         controls.update(); 
                         
+                    } else if (keyCode == 37) { // Left
+                        num -= 1;
+                        createSkybox();
+                    } else if (keyCode == 39) { // Right
+                        num += 1;
+                        createSkybox();
                     }
 
                     
@@ -114,18 +134,6 @@
                 pSmartLight.position.set(-22,5,20);
                 scene.add(pSmartLight);
 
-                // light = new THREE.PointLight(0xc4c4c4,10);
-                // light.position.set(0,300,500);
-                // scene.add(light);
-                // light2 = new THREE.PointLight(0xc4c4c4,10);
-                // light2.position.set(500,100,0);
-                // scene.add(light2);
-                // light3 = new THREE.PointLight(0xc4c4c4,10);
-                // light3.position.set(0,100,-500);
-                // scene.add(light3);
-                // light4 = new THREE.PointLight(0xc4c4c4,10);
-                // light4.position.set(-500,300,500);
-                // scene.add(light4);
                 
                 const y_axis = new THREE.Vector3(0,1,0);
                 var loader = new THREE.GLTFLoader();
@@ -189,32 +197,7 @@
                 displayCase.position.y = 13;
                 scene.add(displayCase);
 
-                // R.Stap
-                let skyMatArr = [];
-                let textureFront = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp2.jpg");
-                let textureBack = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp2.jpg");
-                let textureUp = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp3.jpg");
-                let textureDown = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp1.jpg");
-                let textureRight = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp2.jpg");
-                let textureLeft = new THREE.TextureLoader().load("./assets/skybox/skybox1/temp2.jpg");
-
-                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureFront}));
-                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureBack}));
-                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureUp}));
-                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureDown}));
-                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureRight}));
-                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureLeft}));
-
-                for (let  i =0; i < skyMatArr.length; i++) {
-                    skyMatArr[i].side = THREE.BackSide;
-                }
-
-                const skyGeom = new THREE.CubeGeometry(400,400,400);
-                let skybox = new THREE.Mesh(skyGeom,skyMatArr);
-
-
-                scene.add(skybox);
-
+                createSkybox();
 
             }
             function animate() {
@@ -232,6 +215,31 @@
                     // model3.position.x = (model3.position.x+1)*(Math.PI/180);
                     // model3.position.z += (model3.position.z+1)*(Math.PI/180);
                 }
+                renderer.render(scene, camera);
+            }
+            function createSkybox() {
+                // R.Stap
+                let skyMatArr = [];
+                let textureFront = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/1.jpg");
+                let textureBack = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/2.jpg");
+                let textureUp = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/3.jpg");
+                let textureDown = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/4.jpg");
+                let textureRight = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/5.jpg");
+                let textureLeft = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/6.jpg");
+
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureFront}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureBack}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureUp}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureDown}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureRight}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureLeft}));
+
+                for (let  i =0; i < skyMatArr.length; i++) {
+                    skyMatArr[i].side = THREE.BackSide;
+                }
+
+                skybox = new THREE.Mesh(skyGeom,skyMatArr);
+                scene.add(skybox);
                 renderer.render(scene, camera);
             }
             init();
