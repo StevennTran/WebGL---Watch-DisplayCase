@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> CP411 Final Project</title>
+        <meta charset = UTF-8>
+        <style>
+            body{margin: 0;}
+            canvas {width: 100%; height: 100%;}
+        </style>
+    </head>
+
+    <body>
+
+        <body>
+            
+            <script src="libs/three.js"></script>
+            <script src="libs/GLTFLoader.js"></script>
+            <script src="libs/OBJLoader.js"></script>
+            <script src="libs/OrbitControls.js"></script>
+        </body>
+
+        <script>
+            //GROUP MEMBERS:
+            // Steven Tran, and Haricharan Vinukonda
+            console.log("Controls");
+            console.log("   Mouse Click - Move the camera around");
+            console.log("   left/right arrow - Change Background");
+            console.log("   1 - Pan to Watch #1");
+            console.log("   2 - Pan to Watch #2");
+            console.log("   3 - Pan to Watch #3");
+            console.log("   4 - Default view display");
+
+        </script>
+
+        <script>
+            let scene, camera, renderer, controls, model1, model2, model3, glassTexture, pStopLight, pAnalogLight, pSmartLight, skybox;
+            var lights = true;
+            var skyboxThemes = ["skybox1", "skybox2", "skybox3"];
+            var num = 0;
+            const skyGeom = new THREE.CubeGeometry(400,400,400);
+            const x_axis = new THREE.Vector3(1,0,0);
+            const y_axis = new THREE.Vector3(0,1,0);
+            const z_axis = new THREE.Vector3(0,0,1);
+            function init() {
+                const load0 = new THREE.TextureLoader();
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xD4D4D4);
+
+                renderer = new THREE.WebGLRenderer({antialias:true});
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+
+                document.addEventListener("keydown", onDocumentKeyDown, false);
+                function onDocumentKeyDown(event) {
+                    var keyCode = event.which;
+                    if (keyCode == 32 & lights == true) {
+                        pStopLight.power = 0;
+                        pAnalogLight.power = 0;
+                        pSmartLight.power = 0;
+                        lights = false;
+                    } 
+                    else if (keyCode == 32 & lights == false) {
+                        pStopLight.power = 4 * Math.PI;
+                        pAnalogLight.power = 4 * Math.PI;
+                        pSmartLight.power = 4 * Math.PI;
+                        lights = true;
+                    } else if (keyCode == 49) {
+                        
+                        camera.up.set(0,1,0);
+                        const look = new THREE.Vector3(-20,5,12);
+                        controls.target = look;
+                        camera.updateProjectionMatrix();
+                        camera.position.set(-43,5,37);
+                        controls.update(); 
+                        
+                    } else if (keyCode == 50) {
+                        
+                        camera.up.set(0,1,0);
+                        const look = new THREE.Vector3(20,5,14);
+                        controls.target = look;
+                        camera.updateProjectionMatrix();
+                        camera.position.set(48,5,32);
+
+                        controls.update(); 
+                        
+                    } else if (keyCode == 51) {
+                        const look = new THREE.Vector3(0,5,-20);
+                        controls.target = look;
+                        camera.position.set(0,5,-60);
+                        controls.update(); 
+                        
+                    } else if (keyCode == 52) {
+                        const look = new THREE.Vector3(0,0,0);
+                        controls.target = look;
+                        camera.position.set(60,20,0);
+                        controls.update(); 
+                        
+                    } else if (keyCode == 37) { // Left
+                        num -= 1;
+                        createSkybox();
+                    } else if (keyCode == 39) { // Right
+                        num += 1;
+                        createSkybox();
+                    }
+
+                    
+                    renderer.render(scene,camera);
+                }
+
+                camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 1, 10000);
+
+
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+                camera.position.set(60,20,0);
+                // camera.position.set(0,20,0);
+                controls.minDistance = 10;
+                controls.maxDistance = 250;
+                controls.update();
+
+                aLight = new THREE.AmbientLight(0x404040, 8);
+                scene.add(aLight);
+
+                // Stopwatch
+                pStopLight = new THREE.PointLight(0x404040, 5.5);
+                pStopLight.position.set(0,5,-30);
+                scene.add(pStopLight);
+
+                // Analog
+                pAnalogLight = new THREE.PointLight(0x404040, 5.5);
+                pAnalogLight.position.set(40,0,40);
+                scene.add(pAnalogLight);
+
+                // Iwatch
+                pSmartLight = new THREE.PointLight(0x404040, 3.5);
+                pSmartLight.position.set(-22,5,20);
+                scene.add(pSmartLight);
+
+                
+                const y_axis = new THREE.Vector3(0,1,0);
+                var loader = new THREE.GLTFLoader();
+                loader.load("/assets/watch1/scene.gltf", function(gltf) {
+                    model1 = gltf.scene;
+                    gltf.scene.scale.set(0.25,0.25,0.25);
+                    gltf.scene.position.set(-15,5,12);
+                    gltf.scene.rotateOnAxis(y_axis,130*(Math.PI/180));
+                    gltf.scene.rotateOnAxis(x_axis,270*(Math.PI/180));
+                    
+                    scene.add(gltf.scene);
+                    renderer.render(scene,camera);
+            
+                });
+               
+
+
+                var loader2 = new THREE.GLTFLoader();
+                loader2.load("/assets/watch2/scene.gltf", function(gltf) {
+                    model2 = gltf.scene;
+                    gltf.scene.scale.set(6,6,6);
+                    gltf.scene.position.set(20,5.5,14);
+                    gltf.scene.rotateOnAxis(y_axis,50*(Math.PI/180));
+                    gltf.scene.rotateOnAxis(x_axis,90*(Math.PI/180));
+
+                    scene.add(gltf.scene);
+                    renderer.render(scene,camera);
+
+                });
+
+
+                // var material = new THREE.MeshPhongMaterial({map: map});
+
+                var loader3 = new THREE.GLTFLoader();
+                loader3.load("/assets/watch3/scene.gltf", function(gltf) {
+                    model3 = gltf.scene; 
+                    gltf.scene.scale.set(5,5,5);
+                    gltf.scene.position.set(0,5,-18);
+                    gltf.scene.rotateOnAxis(y_axis,180*(Math.PI/180));
+                    // gltf.scene.rotateOnAxis(y_axis,270*(Math.PI/180));
+                    
+                    scene.add(gltf.scene);
+                    renderer.render(scene,camera);
+                });
+
+                const textureLoader = new THREE.TextureLoader();
+                glassTexture = new textureLoader.load("Transparent.png");
+                let pedestal = new THREE.Mesh(
+                    new THREE.CylinderGeometry( 30, 30, 5, 64 ),
+                    new THREE.MeshPhysicalMaterial ({
+                        color:0x000000,
+                        map:glassTexture
+                    })
+                );
+                pedestal.position.y = -10;
+                scene.add(pedestal);
+
+                var material = new THREE.MeshPhongMaterial( { color:0xabe7f5, opacity: 0.1, transparent: true} )
+                let displayCase = new THREE.Mesh(
+                new THREE.CylinderGeometry(30.1,30.1,40,32,32, false ), material);
+                displayCase.position.y = 13;
+                scene.add(displayCase);
+
+                createSkybox();
+
+            }
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.autoRotate = true;
+                controls.update(); 
+                
+                if (model1) {
+                    // model1.rotation.z += 0.01;
+                }
+                if (model2) {
+                    // model2.rotation.z += 0.01;
+                }
+                if (model3) {
+                    // model3.position.x = (model3.position.x+1)*(Math.PI/180);
+                    // model3.position.z += (model3.position.z+1)*(Math.PI/180);
+                }
+                renderer.render(scene, camera);
+            }
+            function createSkybox() {
+                // R.Stap
+                let skyMatArr = [];
+                let textureFront = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/1.jpg");
+                let textureBack = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/2.jpg");
+                let textureUp = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/3.jpg");
+                let textureDown = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/4.jpg");
+                let textureRight = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/5.jpg");
+                let textureLeft = new THREE.TextureLoader().load("./assets/skybox/"+ skyboxThemes[num % 3] + "/6.jpg");
+
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureFront}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureBack}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureUp}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureDown}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureRight}));
+                skyMatArr.push(new THREE.MeshBasicMaterial({map:textureLeft}));
+
+                for (let  i =0; i < skyMatArr.length; i++) {
+                    skyMatArr[i].side = THREE.BackSide;
+                }
+
+                skybox = new THREE.Mesh(skyGeom,skyMatArr);
+                scene.add(skybox);
+                renderer.render(scene, camera);
+            }
+            init();
+            animate();
+        </script>
+    </body>
+
+
+</html>
